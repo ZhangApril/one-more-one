@@ -1,0 +1,19 @@
+# 依赖与构建产物
+node_modules/
+miniprogram_npm/
+dist/
+build/
+
+# 开发者工具个人本地配置（含个人 appid / 调试设置，不应入库）
+project.private.config.json
+
+# 日志与缓存
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# 编辑器与系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
