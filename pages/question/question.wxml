@@ -1,0 +1,41 @@
+<view class="page">
+  <view class="topbar">
+    <view class="back" bindtap="onBack">‹</view>
+    <view class="q-title">{{quizTitle}}</view>
+    <view class="progress-text">
+      <text class="cur">{{curIndex + 1}}</text>
+      <text class="total"> / {{total}}</text>
+    </view>
+  </view>
+
+  <view class="progress">
+    <view class="progress-fill" style="width: {{percent}}%"></view>
+  </view>
+
+  <view class="question" wx:if="{{current}}">
+    <view class="q-no">第 {{curIndex + 1}} 题</view>
+    <view class="q-text">{{current.title}}</view>
+    <view class="q-hint">{{quizHint}}</view>
+  </view>
+
+  <view class="scale">
+    <view
+      wx:for="{{scale}}"
+      wx:key="index"
+      class="scale-col"
+      data-index="{{index}}"
+      bindtap="onSelect"
+    >
+      <view class="circle {{curAnswer === index ? 'active' : ''}}">
+        <text wx:if="{{curAnswer !== index}}" class="num">{{index + 1}}</text>
+        <text wx:else class="check">✓</text>
+      </view>
+      <view class="scale-label {{curAnswer === index ? 'active' : ''}}">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="footer">
+    <view class="act outline {{curIndex === 0 ? 'disabled' : ''}}" bindtap="onPrev">上一题</view>
+    <view class="act solid {{curAnswer === null ? 'disabled' : ''}}" bindtap="onNext">下一题</view>
+  </view>
+</view>

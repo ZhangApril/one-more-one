@@ -1,0 +1,103 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  background: var(--ono-bg);
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+}
+
+.wrap {
+  padding: 24rpx 40rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.poster-box {
+  position: relative;
+  width: 100%;
+}
+
+/* 离屏画布：移出可视区域但保持可绘制 */
+.poster-canvas {
+  position: fixed;
+  left: -9999rpx;
+  top: 0;
+  width: 750rpx;
+  height: 1000rpx;
+}
+
+.poster {
+  width: 100%;
+  border-radius: var(--ono-radius-lg);
+  box-shadow: var(--ono-shadow);
+}
+
+.poster-loading {
+  width: 100%;
+  height: 800rpx;
+  border-radius: var(--ono-radius-lg);
+  background: #FFFFFF;
+  color: var(--ono-text-sub);
+  font-size: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hint {
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  color: var(--ono-text-sub);
+}
+
+/* 三个圆形操作 */
+.actions {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 40rpx;
+}
+
+.act {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: transparent;
+  padding: 0;
+  font-size: 24rpx;
+  color: var(--ono-text);
+  line-height: 1.4;
+}
+
+.act::after {
+  border: none;
+}
+
+.act:active {
+  opacity: 0.7;
+}
+
+.act-icon {
+  width: 108rpx;
+  height: 108rpx;
+  margin-bottom: 12rpx;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2rpx solid var(--ono-border);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.act-img {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+}
+
+.back-btn {
+  width: 100%;
+  margin-top: 48rpx;
+}

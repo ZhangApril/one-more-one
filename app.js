@@ -1,19 +1,10 @@
 // app.js
 App({
   onLaunch() {
-    // 展示本地存储能力
-    const logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
-
-    // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-      }
-    })
+    // 一期无后端：不调用 wx.login 换取 openId
   },
   globalData: {
-    userInfo: null
+    // 最近一次测试结果（同时存在 storage 中，供结果页/分享页直接打开）
+    lastResult: null
   }
 })

@@ -1,53 +1,70 @@
-// index.js
-const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
+const CONFIG = require('../../config/index.js')
+
+const DEFAULT_AVATAR = CONFIG.DEFAULT_AVATAR
 
 Page({
   data: {
-    motto: 'Hello World',
-    userInfo: {
-      avatarUrl: defaultAvatarUrl,
-      nickName: '',
-    },
-    hasUserInfo: false,
-    canIUseGetUserProfile: wx.canIUse('getUserProfile'),
-    canIUseNicknameComp: wx.canIUse('input.type.nickname'),
+    brand: CONFIG.BRAND,
+    brandSubCn: CONFIG.BRAND_SUB_CN,
+    heroTagline: CONFIG.HERO_TAGLINE,
+    lead: CONFIG.HOME_LEAD,
+    trust: CONFIG.HOME_TRUST,
+    startText: CONFIG.BTN_START,
+    skipText: CONFIG.SKIP_TEXT,
+    avatarUrl: DEFAULT_AVATAR,
+    nickName: ''
   },
-  bindViewTap() {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
+
+  onLoad() {
+    const profile = wx.getStorageSync(CONFIG.STORAGE_KEYS.PROFILE)
+    if (profile) {
+      this.setData({
+        avatarUrl: profile.avatarUrl || DEFAULT_AVATAR,
+        nickName: profile.nickName || ''
+      })
+    }
   },
+
   onChooseAvatar(e) {
     const { avatarUrl } = e.detail
-    const { nickName } = this.data.userInfo
-    this.setData({
-      "userInfo.avatarUrl": avatarUrl,
-      hasUserInfo: nickName && avatarUrl && avatarUrl !== defaultAvatarUrl,
-    })
+    if (!avatarUrl) return
+    this.setData({ avatarUrl })
+    this.saveProfile()
   },
-  onInputChange(e) {
-    const nickName = e.detail.value
-    const { avatarUrl } = this.data.userInfo
-    this.setData({
-      "userInfo.nickName": nickName,
-      hasUserInfo: nickName && avatarUrl && avatarUrl !== defaultAvatarUrl,
-    })
+
+  onNicknameChange(e) {
+    const value = e.detail.value || ''
+    this.setData({ nickName: value })
+    this.saveProfile()
   },
-  onInputSexChange(e) {
-    const nickName = e.detail.value
-    const sex = '男'
+
+  /** 保存授权信息（游客态不写，保持 null） */
+  saveProfile() {
+    const { avatarUrl, nickName } = this.data
+    if (avatarUrl === DEFAULT_AVATAR) return
+    wx.setStorageSync(CONFIG.STORAGE_KEYS.PROFILE, { avatarUrl, nickName })
   },
-  getUserProfile(e) {
-    // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
-    wx.getUserProfile({
-      desc: '展示用户信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-      success: (res) => {
-        console.log(res)
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    })
+
+  goQuiz() {
+    wx.navigateTo({ url: '/pages/question/question' })
   },
+
+  onStart() {
+    this.saveProfile()
+    this.goQuiz()
+  },
+
+  /** 游客模式：跳过授权直接开测 */
+  onSkip() {
+    wx.removeStorageSync(CONFIG.STORAGE_KEYS.PROFILE)
+    this.setData({ avatarUrl: DEFAULT_AVATAR, nickName: '' })
+    this.goQuiz()
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '在黑森林里，找到你的另一个自己',
+      path: '/pages/index/index'
+    }
+  }
 })

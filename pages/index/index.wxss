@@ -1,62 +1,273 @@
-/**index.wxss**/
-page {
-  height: 100vh;
+.page {
+  position: relative;
+  min-height: 100vh;
+  background: var(--ono-bg);
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+}
+
+/* ========== 扁平几何森林插画 ========== */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 640rpx;
+  background: linear-gradient(180deg, #2C4A38 0%, #26412F 62%, #1E3A2A 100%);
+  overflow: hidden;
+}
+
+.hero-tagline {
+  position: absolute;
+  left: 48rpx;
+  top: 48rpx;
+  font-family: "Kaiti SC", "STKaiti", "KaiTi", serif;
+  font-size: 34rpx;
+  letter-spacing: 6rpx;
+  color: #E8D9B0;
+}
+
+/* 月亮（黄色圆 + 光晕） */
+.moon {
+  position: absolute;
+  right: 72rpx;
+  top: 72rpx;
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: #F0C75E;
+  box-shadow: 0 0 0 28rpx rgba(240, 199, 94, 0.12), 0 0 0 56rpx rgba(240, 199, 94, 0.06);
+}
+
+/* 松树剪影（CSS 三角） */
+.tree {
+  position: absolute;
+  bottom: 120rpx;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: transparent;
+}
+
+.tree-1 {
+  left: 40rpx;
+  border-width: 0 90rpx 200rpx 90rpx;
+  border-bottom-color: #1B3226;
+}
+
+.tree-2 {
+  left: 250rpx;
+  border-width: 0 70rpx 160rpx 70rpx;
+  border-bottom-color: #20402E;
+}
+
+.tree-3 {
+  right: 60rpx;
+  border-width: 0 85rpx 190rpx 85rpx;
+  border-bottom-color: #1B3226;
+}
+
+.tree-4 {
+  right: 280rpx;
+  border-width: 0 60rpx 140rpx 60rpx;
+  border-bottom-color: #20402E;
+}
+
+/* 地面 */
+.ground {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 120rpx;
+  background: #1B3226;
+}
+
+/* 大灰狼（深灰团子 + 耳朵 + 黄眼睛） */
+.wolf {
+  position: absolute;
+  left: 96rpx;
+  bottom: 96rpx;
+  width: 110rpx;
+  height: 96rpx;
+  background: #3A3F3A;
+  border-radius: 48rpx 48rpx 24rpx 24rpx;
+  z-index: 2;
+}
+
+.wolf-ear {
+  position: absolute;
+  top: -22rpx;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: transparent;
+}
+
+.wolf-ear.left {
+  left: 14rpx;
+  border-width: 0 16rpx 26rpx 16rpx;
+  border-bottom-color: #3A3F3A;
+}
+
+.wolf-ear.right {
+  right: 14rpx;
+  border-width: 0 16rpx 26rpx 16rpx;
+  border-bottom-color: #3A3F3A;
+}
+
+.wolf-eye {
+  position: absolute;
+  top: 34rpx;
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: #F0C75E;
+}
+
+.wolf-eye.left { left: 28rpx; }
+.wolf-eye.right { right: 28rpx; }
+
+/* 小红帽（红斗篷 + 奶油色笑脸） */
+.hood {
+  position: absolute;
+  left: 50%;
+  bottom: 108rpx;
+  margin-left: -80rpx;
+  width: 160rpx;
+  height: 220rpx;
+  background: #D6453C;
+  border-radius: 80rpx 80rpx 12rpx 12rpx;
+  z-index: 2;
+}
+
+.hood-face {
+  position: absolute;
+  left: 50%;
+  top: 44rpx;
+  margin-left: -52rpx;
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 50%;
+  background: #F7E6CE;
+}
+
+.hood-eye {
+  position: absolute;
+  top: 40rpx;
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: #2B2B2B;
+}
+
+.hood-eye.left { left: 28rpx; }
+.hood-eye.right { right: 28rpx; }
+
+.hood-smile {
+  position: absolute;
+  left: 50%;
+  top: 56rpx;
+  margin-left: -16rpx;
+  width: 32rpx;
+  height: 18rpx;
+  border-bottom: 6rpx solid #2B2B2B;
+  border-radius: 0 0 32rpx 32rpx;
+}
+
+/* ========== 奶油白文案区 ========== */
+.content {
+  padding: 48rpx 48rpx 0;
   display: flex;
   flex-direction: column;
 }
-.scrollarea {
-  flex: 1;
-  overflow-y: hidden;
+
+.brand {
+  font-size: 60rpx;
+  font-weight: 700;
+  color: var(--ono-text);
+  letter-spacing: 2rpx;
 }
 
-.userinfo {
+.brand-sub {
+  margin-top: 12rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--ono-forest);
+}
+
+.lead {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  line-height: 1.7;
+  color: var(--ono-text-sub);
+}
+
+/* 授权卡（新版原型无此卡，按已确认需求补充） */
+.auth-card {
+  margin-top: 40rpx;
+  padding: 32rpx;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  border: 2rpx solid var(--ono-border);
+  border-radius: var(--ono-radius-lg);
+  box-shadow: var(--ono-shadow);
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #aaa;
-  width: 80%;
 }
 
-.userinfo-avatar {
-  overflow: hidden;
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.usermotto {
-  margin-top: 200px;
-}
-
-.avatar-wrapper {
+.avatar-btn {
+  width: 120rpx;
+  height: 120rpx;
   padding: 0;
-  width: 56px !important;
-  border-radius: 8px;
-  margin-top: 40px;
-  margin-bottom: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #F1E6D2;
+  border: 4rpx solid #FFFFFF;
+  box-shadow: 0 6rpx 16rpx rgba(30, 58, 42, 0.12);
+}
+
+.avatar-btn::after {
+  border: none;
 }
 
 .avatar {
-  display: block;
-  width: 56px;
-  height: 56px;
-}
-
-.nickname-wrapper {
-  display: flex;
   width: 100%;
-  padding: 16px;
-  box-sizing: border-box;
-  border-top: .5px solid rgba(0, 0, 0, 0.1);
-  border-bottom: .5px solid rgba(0, 0, 0, 0.1);
-  color: black;
-}
-
-.nickname-label {
-  width: 105px;
+  height: 100%;
 }
 
 .nickname-input {
-  flex: 1;
+  width: 100%;
+  height: 80rpx;
+  margin-top: 24rpx;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+  background: var(--ono-bg);
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  color: var(--ono-text);
+  text-align: center;
+}
+
+.nickname-placeholder {
+  color: #B9AC93;
+}
+
+.skip {
+  margin-top: 20rpx;
+  font-size: 26rpx;
+  color: var(--ono-primary);
+}
+
+.skip:active {
+  opacity: 0.7;
+}
+
+.start-btn {
+  margin-top: 48rpx;
+}
+
+.trust {
+  margin-top: 24rpx;
+  font-size: 24rpx;
+  color: var(--ono-text-sub);
+  text-align: center;
 }

@@ -1,0 +1,67 @@
+<view class="page">
+  <view class="wrap">
+    <!-- 人格卡片（命中隐藏结局时切换为 WOLF） -->
+    <view
+      class="persona-card {{displayType === 'WOLF' ? 'camp-wolfking' : 'camp-' + p.camp}} {{showWolf ? 'flip' : ''}}"
+    >
+      <view class="pc-top">
+        <text class="pc-lead">{{lead}}</text>
+        <view class="badge">{{displayType}}</view>
+      </view>
+      <image class="persona-img" src="{{p.image}}" mode="aspectFit"></image>
+      <view class="role">{{p.role}}</view>
+      <view class="subtitle">{{campLabel}} · {{p.subtitle}}</view>
+      <view class="slogan">{{p.slogan}}</view>
+    </view>
+
+    <!-- 隐藏结局 -->
+    <block wx:if="{{showWolf}}">
+      <view class="wolf-tip">你触发了隐藏结局 · 狼性指数 {{wolfIndex}}/{{threshold}}</view>
+      <view class="card">
+        <view class="card-title">狼的独白</view>
+        <view wx:for="{{wolf.monologue}}" wx:key="index" class="para">{{item}}</view>
+      </view>
+      <view class="card">
+        <view class="card-title">为什么你是狼</view>
+        <view class="para">{{wolf.reason}}</view>
+      </view>
+      <view class="toggle-wolf" bindtap="onToggleWolf">回到我的人格</view>
+    </block>
+
+    <!-- 维度解析（双向百分比） -->
+    <view class="card">
+      <view class="card-title">维度解析</view>
+      <view wx:for="{{dimensions}}" wx:key="key" class="dim">
+        <view class="dim-line">
+          <text class="dim-name">{{item.label}}</text>
+          <text class="dim-values">
+            {{item.posLabel}} {{item.posLetter}} {{item.posPercent}}% / {{item.negLabel}} {{item.negLetter}} {{item.negPercent}}%
+          </text>
+        </view>
+        <view class="dim-bar">
+          <view class="dim-fill" style="width: {{item.majorPercent}}%"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 特质 -->
+    <view class="card" wx:if="{{p.tags.length}}">
+      <view class="card-title">你的特质</view>
+      <view class="tags">
+        <view wx:for="{{p.tags}}" wx:key="index" class="tag {{index % 2 === 0 ? 'tag-green' : 'tag-red'}}">
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 分析 -->
+    <view class="card">
+      <view class="card-title">在森林里的你</view>
+      <view wx:for="{{p.forest}}" wx:key="index" class="para">{{item}}</view>
+      <view class="disclaimer">{{disclaimer}}</view>
+    </view>
+
+    <button class="btn btn-primary" bindtap="onGoShare">{{shareText}}</button>
+    <button class="btn btn-outline retest" bindtap="onRetest">{{retestText}}</button>
+  </view>
+</view>

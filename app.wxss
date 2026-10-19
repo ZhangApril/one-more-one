@@ -1,10 +1,123 @@
-/**app.wxss**/
+/**app.wxss —— 全局样式与设计变量（对齐 2026-10-19 新版原型：奶油白底 + 红色主色）**/
+
+page {
+  /* 主色：小红帽红（按钮 / 进度条 / 量表选中态） */
+  --ono-primary: #C0453D;
+  --ono-primary-deep: #A83A33;
+
+  /* 背景 / 卡片 */
+  --ono-bg: #F5EBDC;             /* 页面奶油白底 */
+  --ono-forest-deep: #1E3A2A;    /* 深绿渐变起点（插画卡 / 人格卡 / 海报） */
+  --ono-forest: #2E5A42;         /* 深绿渐变终点 / 墨绿强调 */
+  --ono-card: #FFFFFF;
+
+  /* 文字 */
+  --ono-text: #1E3A2A;           /* 主文字（浅底） */
+  --ono-text-sub: #8A9A85;       /* 次要文字·灰绿 */
+  --ono-gold: #D9A852;           /* 点缀金（卡片副称） */
+
+  /* 描边 */
+  --ono-border: #D8C9B4;         /* 浅棕（量表圆钮 / 次要按钮） */
+  --ono-border-strong: #C9B8A0;
+
+  /* 排版 */
+  --ono-font: "PingFang SC", -apple-system, "Helvetica Neue", sans-serif;
+  --ono-radius: 24rpx;
+  --ono-radius-lg: 32rpx;
+  --ono-shadow: 0 8rpx 24rpx rgba(30, 58, 42, 0.08);
+
+  background-color: var(--ono-bg);
+  color: var(--ono-text);
+  font-family: var(--ono-font);
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
 .container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
   box-sizing: border-box;
-} 
+  min-height: 100vh;
+  padding: 0 40rpx calc(40rpx + env(safe-area-inset-bottom));
+}
+
+/* 通用胶囊按钮 */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 96rpx;
+  border-radius: 48rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--ono-primary);
+  color: #FFFFFF;
+  box-shadow: 0 10rpx 24rpx rgba(192, 69, 61, 0.28);
+}
+
+.btn-outline {
+  background: #FFFFFF;
+  color: var(--ono-primary);
+  border: 2rpx solid var(--ono-primary);
+  box-shadow: none;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ono-text-sub);
+  border: 2rpx solid var(--ono-border);
+  box-shadow: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+.btn-disabled {
+  opacity: 0.38;
+  box-shadow: none;
+}
+
+/* 通用卡片 */
+.card {
+  background: var(--ono-card);
+  color: var(--ono-text);
+  border-radius: var(--ono-radius-lg);
+  box-shadow: var(--ono-shadow);
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--ono-text);
+  margin-bottom: 20rpx;
+}
+
+/* 文本层级 */
+.t-title {
+  font-size: 48rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+}
+
+.t-sub {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.t-body {
+  font-size: 28rpx;
+  font-weight: 400;
+}
+
+.t-hint {
+  font-size: 24rpx;
+  color: var(--ono-text-sub);
+}

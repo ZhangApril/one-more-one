@@ -1,0 +1,40 @@
+<view class="page">
+  <view class="wrap">
+    <view class="poster-box">
+      <canvas type="2d" id="posterCanvas" class="poster-canvas"></canvas>
+      <image
+        wx:if="{{posterPath}}"
+        class="poster"
+        src="{{posterPath}}"
+        mode="widthFix"
+        show-menu-by-longpress="true"
+      ></image>
+      <view wx:else class="poster-loading">海报生成中…</view>
+    </view>
+
+    <view class="hint">长按海报可保存图片</view>
+
+    <view class="actions">
+      <button class="act" open-type="share">
+        <view class="act-icon">
+          <image class="act-img" src="/assets/ui/icon-wechat.jpg" mode="aspectFill"></image>
+        </view>
+        <text>微信好友</text>
+      </button>
+      <button class="act" open-type="shareTimeline">
+        <view class="act-icon">
+          <image class="act-img" src="/assets/ui/icon-timeline.jpg" mode="aspectFill"></image>
+        </view>
+        <text>朋友圈</text>
+      </button>
+      <view class="act" bindtap="onSave">
+        <view class="act-icon">
+          <image class="act-img" src="/assets/ui/icon-save.jpg" mode="aspectFill"></image>
+        </view>
+        <text>保存图片</text>
+      </view>
+    </view>
+
+    <button class="btn btn-primary back-btn" bindtap="onBackHome">{{backText}}</button>
+  </view>
+</view>

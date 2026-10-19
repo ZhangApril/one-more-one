@@ -10,11 +10,13 @@
 
 这是一个 **微信「多端应用」小程序模板**（由微信开发者工具创建的官方 template 改造而来），
 具备一次开发、同时发布到 **微信小程序 / Android App / iOS App / 鸿蒙（HarmonyOS）元服务** 的能力。
+当前正在基于该模板开发 **One More One —— 小红帽找大灰狼 MBTI 人格测试**（需求见 `REQUIREMENTS.md`）。
 
 - AppID：`wx7aec1d0de2af82b4`
 - 项目名：`one-more-one`
 - 架构标识：`projectArchitecture: "multiPlatform"`、`miniVersion: "v2"`
-- 当前业务内容仅为模板示例：**首页填写头像/昵称/性别 + 启动日志页**
+- 业务目标：首页（授权 + 游客）→ 10 道 5 级量表题 → 人格结果卡 → 分享海报
+- 视觉基准：**`UIref/`（4 张高保真原型）+ `design/`（49 张组件切图）**，森林夜景扁平几何插画风
 
 ---
 
@@ -22,9 +24,9 @@
 
 ```
 xiaochengxu-onemoreone/
-├─ app.js                        小程序入口逻辑（onLaunch + globalData）
-├─ app.json                      全局配置：页面路由、window、组件框架
-├─ app.wxss                      全局样式（仅 .container 一个公共类）
+├─ app.js                        小程序入口（模板日志/登录逻辑已清理）
+├─ app.json                      全局配置：主包 2 页 + 分包 pkg-result + preloadRule
+├─ app.wxss                      全局样式：主题 CSS 变量 + 通用按钮/卡片/文本类
 ├─ app.miniapp.json              多端应用适配配置（绑定原始小程序 userName）
 │
 ├─ project.config.json           开发者工具项目配置（appid、编译选项）
@@ -33,6 +35,36 @@ xiaochengxu-onemoreone/
 ├─ sitemap.json                  微信索引配置（allow 全部页面）
 │
 ├─ .gitignore                    忽略 node_modules / miniprogram_npm / project.private.config.json
+│
+├─ REQUIREMENTS.md               需求文档（PRD，当前 v0.4）
+├─ design.md                     本文件：目录结构与技术要点
+│
+├─ UIref/                        【视觉参照·不入包】4 张高保真原型
+│  ├─ 01_首页.jpeg
+│  ├─ 02_回答页.jpeg
+│  ├─ 03_测试结果页.jpeg
+│  └─ 04_分享页.jpeg
+│
+├─ design/                       【视觉参照·不入包】49 张组件切图（jpeg，文字已烘焙）
+│
+├─ generated-images/             【中间产物·不入包】image_gen 产出的 3×3 九宫格原图
+│
+├─ tools/                        【不入包】图片处理脚本
+│  ├─ split-grid.js              九等分 + 色键抠图 + 压缩（Node + jimp）
+│  └─ package.json               仅声明 jimp 依赖
+│
+├─ assets/                       【入包】小程序实际使用的图片资产
+│  ├─ scene/                     背景、英雄区、地面、月亮、松树 A/B/C
+│  ├─ character/                 16 型人格形象 + 小红帽 / 大灰狼 / WOLF
+│  └─ ui/                        状态栏、顶部栏、分享图标、二维码占位
+│
+├─ config/
+│  ├─ index.js                   QR_CODE_URL（占位二维码）、品牌文案、数据信任数字
+│  └─ ads.js                     广告开关（一期全关）
+│
+├─ data/
+│  ├─ questions.js               32 题题库 + SCALE 常量
+│  └─ personalities.js           16 型文案与配色 + WOLF 配置
 │
 ├─ i18n/
 │  └─ base.json                  多端应用显示名国际化（ios / android / common）
@@ -46,22 +78,31 @@ xiaochengxu-onemoreone/
 │           └─ raw/
 │
 ├─ pages/
-│  ├─ index/                     首页
-│  │  ├─ index.js                头像选择 / 昵称输入 / 版本兼容判断 / 跳转 logs
-│  │  ├─ index.json              页面配置（usingComponents 为空）
-│  │  ├─ index.wxml              三分支条件渲染：填写态 / 低版本兜底 / 已填写态
-│  │  └─ index.wxss              页面样式
-│  └─ logs/                      启动日志页
-│     ├─ logs.js                 读取 storage 中的 logs 并格式化时间
-│     ├─ logs.json               页面配置
-│     ├─ logs.wxml               scroll-view + wx:for 列表
-│     └─ logs.wxss               列表样式（含安全区适配）
+│  ├─ index/                     首页：英雄区 + 授权卡 + 游客入口
+│  └─ question/                  答题页：5 级量表 + 进度条
+│
+├─ pkg-result/                  【分包 result】结果页与分享页 + 16 型形象
+│  ├─ pages/result/             结果页：人格卡 / 维度解析 / 特质 / 分析
+│  ├─ pages/share/              分享页：Canvas 海报 + 保存图片
+│  └─ assets/character/         16 型人格形象 + WOLF（753KB）
 │
 └─ utils/
+   ├─ util.js                    formatTime / formatNumber（保留）
+   ├─ mbti.js                    计分 / 类型判定 / 百分比 / 狼性指数
+   ├─ pick.js                    随机抽题（分层抽样 + 狼题保底 + 去重）
+   └─ canvas-card.js             海报 Canvas 绘制
    └─ util.js                    工具函数：formatTime / formatNumber（CommonJS 导出）
 ```
 
-**说明**：项目当前**没有** `components/` 目录、**没有** `package.json` / `node_modules` / `miniprogram_npm`。
+**说明**：项目当前**没有** `components/` 目录、**没有** 根目录 `package.json` / `node_modules` / `miniprogram_npm`
+（仅 `tools/` 下会有仅供本机图片处理用的 `package.json`，不参与小程序构建）。
+
+**环境与工具约束**：
+
+- **Python 不可用**：`C:\Users\...\WindowsApps\python.exe` 为 Microsoft Store 存根，无法执行脚本
+- **Node 可用**：`D:\nodejs\node.exe` → 切图/抠图等脚本统一用 Node 实现
+- **图片生成**：使用 `image_gen` 能力（通过 `DeferExecuteTool` 调用），支持 `prompt / size / n / quality / style / output_dir`
+- **包体上限**：小程序主包 2MB，图片资产需压缩并规划分包/按需加载
 
 ---
 
@@ -217,3 +258,77 @@ xiaochengxu-onemoreone/
 
 后续提需求时，可直接引用本文件的章节号（如「改三.6 的 `onInputSexChange`」），
 我会先更新此文件的对应章节，再落地代码修改，保证设计与实现同步。
+
+---
+
+## 附录 A：资产清单（design/ 切图 → assets/ 归档）
+
+### A.1 已归档为图片资产（17 个，共约 494KB）
+
+| 目标文件 | 源切图 | 状态 |
+|---|---|---|
+| `assets/scene/bg-page.jpg` | `00_页面背景` | 可直接用（整幅背景） |
+| `assets/scene/bg-hero.jpg` | `02_英雄区背景` | 可直接用（首页英雄区整幅） |
+| `assets/scene/bg-poster.jpg` | `03_海报背景` | 可直接用（海报整幅底） |
+| `assets/scene/bg-card.jpg` | `03_人格卡片背景` | 可直接用（卡片底） |
+| `assets/scene/ground.jpg` | `08_地面` | **待抠图**（jpeg 不透明） |
+| `assets/scene/moon.jpg` | `04_月亮` | **待抠图** |
+| `assets/scene/pine-a.jpg` | `05_松树A` | **待抠图** |
+| `assets/scene/pine-b.jpg` | `06_松树B` | **待抠图** |
+| `assets/scene/pine-c.jpg` | `07_松树C` | **待抠图** |
+| `assets/character/red-riding-hood.jpg` | `09_小红帽` | **待抠图** |
+| `assets/character/wolf.jpg` | `10_大灰狼` | **待抠图** |
+| `assets/ui/status-bar.jpg` | `01_状态栏` | 参照（建议用代码实现） |
+| `assets/ui/top-bar.jpg` | `02_顶部栏` | 参照（建议用代码实现） |
+| `assets/ui/icon-wechat.jpg` | `12_微信好友` | **待抠图**（分享图标） |
+| `assets/ui/icon-timeline.jpg` | `13_朋友圈` | **待抠图** |
+| `assets/ui/icon-save.jpg` | `14_保存图片` | **待抠图** |
+| `assets/ui/qrcode-placeholder.jpg` | `10_二维码` | 占位二维码，`config/index.js` 的 `QR_CODE_URL` 指向它 |
+
+> 待抠图项将在 M2.5 用 `tools/split-grid.js` 统一处理（或由新生成的九宫格图替代），
+> 在此之前页面先用整幅背景图（`bg-hero` / `bg-page` / `bg-card`）搭建视觉，不叠加未抠图元素。
+
+### A.2 仅作视觉参照、必须用代码重写（文字类）
+
+`03_英雄文案`、`04_海报品牌文字`、`04_卡片引导文字`、`04_题号`、`05_MBTI徽章`、`05_海报角色`、
+`05_题干`、`06_海报人格名`、`06_人格角色`、`07_海报人格类型`、`07_人格名称`、`08_海报标语`、
+`08_人格副称`、`08_上一题按钮`、`09_海报分割线`、`09_人格标语`、`09_下一题按钮`、`10_维度解析卡片`、
+`10_二维码`、`11_二维码文案`、`11_品牌标题`、`11_特质卡片`、`12_在森林里的你`、`12_中文副标题`、
+`13_生成分享按钮`、`13_引导文案`、`14_立即测试按钮`、`14_重新测试按钮`、`15_返回首页按钮`、`15_数据信任`、
+`03_进度条`、`06_选项A_选中`、`07_选项B`
+
+原因：文字随数据变化（16 型动态渲染）、jpeg 无透明通道、需支持换行与长文本、包体可控。
+
+### A.3 从原型提取的视觉规范（写入 `app.wxss` CSS 变量）
+
+> **2026-10-19 新版原型已全量更新（四张均换）**：视觉从「深色夜景 + 绿色主色」
+> 切换为「奶油白底 + 红色主色 + 深绿插画卡」。下表为新版取值。
+
+| 规范项 | 取值 |
+|---|---|
+| 主色（按钮 / 进度条 / 量表选中） | `#C0453D`（小红帽红） |
+| 页面底色 | `#F5EBDC`（奶油白） |
+| 插画卡 / 人格卡深绿渐变 | `#1E3A2A` → `#2E5A42` |
+| 墨绿强调（标题 / 副标题 / 进度条填充） | `#2E5A42` |
+| 点缀金（卡片副称文字） | `#D9A852` |
+| 次要文字·灰绿 | `#8A9A85` |
+| 浅棕描边（量表圆钮 / 次要按钮） | `#D8C9B4` |
+| 卡片圆角 | `24rpx`~`32rpx`（原型为大圆角） |
+| 按钮 | 胶囊全圆角；主按钮红底白字，次按钮白底红字红描边 |
+| 量表 | 横排 5 圆钮（数字 1-5），选中红底白色对勾，下标文案加深 |
+| 标题字号 / 字重 | `48rpx` / 700；副标题 `32rpx` / 600；正文 `28rpx` / 400 |
+| 字体 | PingFang SC（系统默认）；人格名在原型中近似宋体，一期沿用系统字重模拟 |
+| 首页插画 | 扁平几何（月亮圆 + 三角松树 + 红衣小红帽 + 深灰狼），采用 **CSS 绘制**替代整幅背景图 |
+
+---
+
+## 附录 B：图片生成批次（M2.5）
+
+| 批次 | 内容 | 键控背景 |
+|---|---|---|
+| A | 小红帽型（F 阵营）8 型人格形象 | `#FF00FF` |
+| B | 大灰狼型（T 阵营）8 型人格形象 | `#FF00FF` |
+| C | WOLF 隐藏结局 + 答题插画 + 加载态 + 空状态 + 徽章底纹 | `#FF00FF` |
+
+统一风格：扁平几何矢量插画、无描边、森林夜色、配色限定 `#1E3A32 / #30A46E / #E5484D / #F5C451 / #FFF7F0`、
+3×3 九宫格、每格独立不跨格、无文字无水印。产出后由 `tools/split-grid.js` 九等分 + 色键抠图。

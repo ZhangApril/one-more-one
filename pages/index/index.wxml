@@ -1,32 +1,50 @@
-<!--index.wxml-->
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
-        </view>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">性别</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入性别" bind:change="onInputSexChange" />
-        </view>
-      </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
+<view class="page">
+  <!-- 扁平几何森林插画（CSS 绘制，对齐新版原型 01_首页） -->
+  <view class="hero">
+    <text class="hero-tagline">{{heroTagline}}</text>
+    <view class="moon"></view>
+    <view class="tree tree-1"></view>
+    <view class="tree tree-2"></view>
+    <view class="tree tree-3"></view>
+    <view class="tree tree-4"></view>
+    <view class="wolf">
+      <view class="wolf-ear left"></view>
+      <view class="wolf-ear right"></view>
+      <view class="wolf-eye left"></view>
+      <view class="wolf-eye right"></view>
     </view>
-    
-    <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
+    <view class="hood">
+      <view class="hood-face">
+        <view class="hood-eye left"></view>
+        <view class="hood-eye right"></view>
+        <view class="hood-smile"></view>
+      </view>
     </view>
+    <view class="ground"></view>
   </view>
-</scroll-view>
+
+  <!-- 奶油白文案区 -->
+  <view class="content">
+    <view class="brand">{{brand}}</view>
+    <view class="brand-sub">{{brandSubCn}}</view>
+    <view class="lead">{{lead}}</view>
+
+    <view class="auth-card">
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+      </button>
+      <input
+        class="nickname-input"
+        type="nickname"
+        placeholder="给自己取个名字（可不填）"
+        placeholder-class="nickname-placeholder"
+        value="{{nickName}}"
+        bindchange="onNicknameChange"
+      />
+      <view class="skip" bindtap="onSkip">{{skipText}}</view>
+    </view>
+
+    <button class="btn btn-primary start-btn" bindtap="onStart">{{startText}}</button>
+    <view class="trust">{{trust}}</view>
+  </view>
+</view>

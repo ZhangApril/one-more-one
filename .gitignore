@@ -7,6 +7,12 @@ build/
 # 开发者工具个人本地配置（含个人 appid / 调试设置，不应入库）
 project.private.config.json
 
+# 图片生成中间产物（九宫格原图，已由 tools/split-grid.js 产出 assets/）
+generated-images/
+
+# 编辑器/本地数据
+.codebuddy/
+
 # 日志与缓存
 *.log
 npm-debug.log*
