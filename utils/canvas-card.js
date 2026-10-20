@@ -47,13 +47,44 @@ function wrapText(ctx, text, maxWidth) {
   return lines
 }
 
+/** 圆形头像：网络头像（微信）失败时回退到本地默认小红帽头像 */
+async function drawAvatar(ctx, canvas, src) {
+  const r = 28
+  const cx = W - 80
+  const cy = 66
+  const paint = async url => {
+    const img = await loadImage(canvas, url)
+    ctx.drawImage(img, cx - r, cy - r, r * 2, r * 2)
+  }
+  ctx.save()
+  ctx.beginPath()
+  ctx.arc(cx, cy, r, 0, Math.PI * 2)
+  ctx.closePath()
+  ctx.clip()
+  try {
+    await paint(src)
+  } catch (e) {
+    try {
+      await paint(CONFIG.DEFAULT_AVATAR)
+    } catch (e2) {
+      /* 都失败则不画头像 */
+    }
+  }
+  ctx.restore()
+  ctx.strokeStyle = 'rgba(255,255,255,0.6)'
+  ctx.lineWidth = 2
+  ctx.beginPath()
+  ctx.arc(cx, cy, r, 0, Math.PI * 2)
+  ctx.stroke()
+}
+
 /**
  * 绘制海报
  * @param {Object} canvas canvas 节点（type="2d"）
- * @param {Object} opts   { type, persona, campLabel, qrUrl }
+ * @param {Object} opts   { type, persona, campLabel, qrUrl, identity }
  */
 async function drawPoster(canvas, opts) {
-  const { type, persona, campLabel, qrUrl } = opts
+  const { type, persona, campLabel, qrUrl, identity } = opts
   const ctx = canvas.getContext('2d')
   const dpr = (wx.getSystemInfoSync().pixelRatio || 2)
   canvas.width = W * dpr
@@ -84,6 +115,24 @@ async function drawPoster(canvas, opts) {
   ctx.fillStyle = 'rgba(255,255,255,0.85)'
   ctx.font = '22px sans-serif'
   ctx.fillText(CONFIG.BRAND_POSTER, W / 2, 76)
+
+  // 右上角身份：头像 + 昵称（游客为默认小红帽头像 +「游客」）
+  if (identity) {
+    await drawAvatar(ctx, canvas, identity.avatarUrl || CONFIG.DEFAULT_AVATAR)
+    // 昵称以头像圆心为基准居中（超出可用宽度时截断加省略号）
+    const rawName = identity.nickName || CONFIG.DEFAULT_NICKNAME
+    const avatarCx = W - 80
+    const maxWidth = (W - avatarCx - 12) * 2
+    ctx.font = '18px sans-serif'
+    let name = rawName
+    while (name.length > 1 && ctx.measureText(name + '…').width > maxWidth) {
+      name = name.slice(0, -1)
+    }
+    if (ctx.measureText(rawName).width > maxWidth) name = name + '…'
+    ctx.textAlign = 'center'
+    ctx.fillStyle = 'rgba(255,255,255,0.85)'
+    ctx.fillText(name, avatarCx, 120)
+  }
 
   // 角色形象
   const imgSize = 300

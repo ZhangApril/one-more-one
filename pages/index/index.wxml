@@ -1,26 +1,8 @@
 <view class="page">
-  <!-- 扁平几何森林插画（CSS 绘制，对齐新版原型 01_首页） -->
+  <!-- 首页横幅插画（生成图，对齐原型 01_首页） -->
   <view class="hero">
+    <image class="hero-img" src="{{heroBanner}}" mode="widthFix"></image>
     <text class="hero-tagline">{{heroTagline}}</text>
-    <view class="moon"></view>
-    <view class="tree tree-1"></view>
-    <view class="tree tree-2"></view>
-    <view class="tree tree-3"></view>
-    <view class="tree tree-4"></view>
-    <view class="wolf">
-      <view class="wolf-ear left"></view>
-      <view class="wolf-ear right"></view>
-      <view class="wolf-eye left"></view>
-      <view class="wolf-eye right"></view>
-    </view>
-    <view class="hood">
-      <view class="hood-face">
-        <view class="hood-eye left"></view>
-        <view class="hood-eye right"></view>
-        <view class="hood-smile"></view>
-      </view>
-    </view>
-    <view class="ground"></view>
   </view>
 
   <!-- 奶油白文案区 -->
@@ -30,18 +12,31 @@
     <view class="lead">{{lead}}</view>
 
     <view class="auth-card">
-      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-        <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
-      </button>
+      <!-- 透明热区只覆盖头像圆，昵称输入框必须保持可原生点击，
+           否则会拦截微信键盘上方「使用微信昵称」的点击 -->
+      <view class="avatar-wrap">
+        <image wx:if="{{avatarUrl}}" class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+        <image wx:else class="avatar-camera" src="{{cameraIcon}}" mode="aspectFit"></image>
+        <button
+          class="avatar-pick"
+          open-type="chooseAvatar"
+          bindchooseavatar="onChooseAvatar"
+          hover-class="avatar-pick-hover"
+        ></button>
+      </view>
       <input
         class="nickname-input"
         type="nickname"
-        placeholder="给自己取个名字（可不填）"
+        focus="{{nickFocus}}"
+        placeholder="点击使用微信昵称"
         placeholder-class="nickname-placeholder"
         value="{{nickName}}"
+        bindinput="onNicknameInput"
         bindchange="onNicknameChange"
+        bindblur="onNicknameBlur"
       />
-      <view class="skip" bindtap="onSkip">{{skipText}}</view>
+
+      <button class="skip-btn" hover-class="skip-hover" bindtap="onSkip">{{skipText}}</button>
     </view>
 
     <button class="btn btn-primary start-btn" bindtap="onStart">{{startText}}</button>

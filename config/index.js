@@ -7,6 +7,8 @@ module.exports = {
   BRAND_POSTER: 'ONE MORE ONE · 森林人格测试',
   BRAND_SUB_CN: '小红帽与大灰狼的森林人格测试',
   HERO_TAGLINE: '森林深处，藏着另一个你',
+  // 首页横幅插画（由 generated-images 生成后裁切压缩，750×525）
+  HERO_BANNER: '/assets/scene/banner-home.jpg',
 
   // 首页
   HOME_LEAD: '走进童话森林，用 10 道小问题，遇见藏在心里的那只小红帽，或那匹温柔的大灰狼。',
@@ -31,12 +33,15 @@ module.exports = {
   SHARE_QR_TIP: '长按识别二维码 测测你的森林人格',
   BTN_BACK_HOME: '返回首页',
 
-  // 二维码：一期无后端，使用本地占位图；接入服务端后改为远程 URL 即可
-  QR_CODE_URL: '/assets/ui/qrcode-placeholder.jpg',
+  // 二维码：一期无后端，使用原型切图（design/10_二维码.jpeg 裁切）；接入服务端后改为远程 URL
+  QR_CODE_URL: '/assets/ui/qrcode.png',
 
-  // 默认头像（游客态）
-  DEFAULT_AVATAR: '/assets/character/red-riding-hood.jpg',
-  DEFAULT_NICKNAME: '旅人',
+  // 默认头像（游客态）：由整页原型图裁切出的头像专用图，保证人物够大
+  DEFAULT_AVATAR: '/assets/character/avatar-guest.jpg',
+  // 未上传头像时的占位相机图标
+  DEFAULT_CAMERA: '/assets/ui/icon-camera.png',
+  // 游客态默认昵称（已授权时用微信昵称）
+  DEFAULT_NICKNAME: '游客',
 
   // 隐藏结局阈值
   WOLF_THRESHOLD: 4,

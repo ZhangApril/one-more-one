@@ -1,19 +1,23 @@
-const CONFIG = require('../../config/index.js')
-const { getPersonality, WOLF } = require('../../data/personalities.js')
-const { drawPoster, W, H } = require('../../utils/canvas-card.js')
+// 注意：本页位于分包 pkg-result/pages/share/，回根目录需三级（../../../）
+const CONFIG = require('../../../config/index.js')
+const { getPersonality, WOLF } = require('../../../data/personalities.js')
+const { drawPoster, W, H } = require('../../../utils/canvas-card.js')
+const { getIdentity } = require('../../../utils/identity.js')
 
 Page({
   data: {
     backText: CONFIG.BTN_BACK_HOME,
     posterPath: '',
     type: '',
-    role: ''
+    role: '',
+    noResult: false
   },
 
   onLoad() {
     const result = wx.getStorageSync(CONFIG.STORAGE_KEYS.LAST_RESULT)
+    // 没有结果时不再静默 redirectTo 首页（会让人以为“点分享被跳走”），改为展示空态由用户自己决定
     if (!result || !result.type) {
-      wx.redirectTo({ url: '/pages/index/index' })
+      this.setData({ noResult: true })
       return
     }
     const isWolf = !!result.isWolf
@@ -45,7 +49,9 @@ Page({
           type: this.data.type,
           persona: this.persona,
           campLabel: this.campLabel,
-          qrUrl: CONFIG.QR_CODE_URL
+          qrUrl: CONFIG.QR_CODE_URL,
+          // 游客自动使用默认小红帽头像 +「游客」
+          identity: getIdentity()
         })
           .then(() => {
             wx.canvasToTempFilePath({
@@ -111,19 +117,45 @@ Page({
     wx.reLaunch({ url: '/pages/index/index' })
   },
 
+  /**
+   * 转发给微信好友：由微信接管（点击会弹出好友选择面板，页面本身不会跳转）
+   * path 是「好友点开分享卡片后的落地页」——指向首页，让好友从测试开始
+   * （注意：开发者工具里做“转发调试”时会按这个 path 打开页面，看上去像是跳到了首页，属于预期行为）
+   */
   onShareAppMessage() {
-    const { type, role } = this.data
-    return {
+    const { type, role, posterPath } = this.data
+    const share = {
       title: `我是 ${type} ${role}，你也来试试？`,
       path: '/pages/index/index'
     }
+    // 海报已生成时作为分享卡片配图，未生成则不传（微信会用页面截图）
+    if (posterPath) share.imageUrl = posterPath
+    return share
   },
 
   onShareTimeline() {
-    const { type, role } = this.data
-    return {
+    const { type, role, posterPath } = this.data
+    const share = {
       title: `我是 ${type} ${role}，你也来试试？`,
-      query: ''
+      // 朋友圈分享不支持自定义 path，只能带 query（拼在当前页面路径后）
+      query: 'from=timeline'
+    }
+    if (posterPath) share.imageUrl = posterPath
+    return share
+  },
+
+  /**
+   * 朋友圈分享（open-type="shareTimeline"）仅在真机生效，开发者工具点击无响应。
+   * 这里在工具环境给出明确提示，避免误以为按钮坏了。
+   */
+  onShareTimelineTap() {
+    try {
+      const info = wx.getSystemInfoSync()
+      if (info.platform === 'devtools') {
+        wx.showToast({ title: '朋友圈分享请用「预览」在真机体验', icon: 'none' })
+      }
+    } catch (e) {
+      // 忽略：取不到系统信息时不影响原生分享
     }
   }
 })

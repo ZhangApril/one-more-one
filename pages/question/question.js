@@ -2,11 +2,13 @@ const CONFIG = require('../../config/index.js')
 const { QUESTIONS, SCALE } = require('../../data/questions.js')
 const { pickQuestions } = require('../../utils/pick.js')
 const { calcResult } = require('../../utils/mbti.js')
+const { getIdentity } = require('../../utils/identity.js')
 
 Page({
   data: {
     quizTitle: CONFIG.QUIZ_TITLE,
     quizHint: CONFIG.QUIZ_HINT,
+    nickName: '',
     scale: SCALE,
     questions: [],
     answers: [],
@@ -22,8 +24,11 @@ Page({
     const lastIds = wx.getStorageSync(CONFIG.STORAGE_KEYS.LAST_QUESTION_IDS) || []
     const questions = pickQuestions(QUESTIONS, { count: CONFIG.QUIZ_COUNT, lastIds })
     wx.setStorageSync(CONFIG.STORAGE_KEYS.LAST_QUESTION_IDS, questions.map(q => q.id))
+    // 身份：已授权用微信昵称，游客用「游客」
+    const { nickName } = getIdentity()
     this.setData(
       {
+        nickName,
         questions,
         answers: questions.map(() => null),
         total: questions.length,
@@ -44,7 +49,17 @@ Page({
 
   onSelect(e) {
     if (this.data.submitting) return
-    const index = Number(e.currentTarget.dataset.index)
+    // 兼容 currentTarget / target 两种取值，并做类型收敛，避免取不到值时静默失败
+    const cur = (e && e.currentTarget && e.currentTarget.dataset) || {}
+    const tar = (e && e.target && e.target.dataset) || {}
+    const raw = cur.index !== undefined ? cur.index : tar.index
+    const index = Number(raw)
+    if (isNaN(index)) {
+      console.warn('[question] onSelect 未取到选项下标：', e)
+      wx.showToast({ title: '选择失败，请重试', icon: 'none' })
+      return
+    }
+
     const { answers, curIndex, total } = this.data
     const next = answers.slice()
     next[curIndex] = index
@@ -56,7 +71,7 @@ Page({
       } else {
         this.finish()
       }
-    }, 200)
+    }, 320)
   },
 
   onNext() {
@@ -106,7 +121,15 @@ Page({
       const payload = Object.assign({}, result, { ts: Date.now() })
       wx.setStorageSync(CONFIG.STORAGE_KEYS.LAST_RESULT, payload)
       wx.hideLoading()
-      wx.redirectTo({ url: '/pkg-result/pages/result/result?type=' + result.type })
+      const url = '/pkg-result/pages/result/result?type=' + result.type
+      wx.redirectTo({
+        url,
+        fail: err => {
+          // 兜底：分包未就绪等情况下改用 reLaunch，避免停在空白页
+          console.error('[question] 跳转结果页失败：', err)
+          wx.reLaunch({ url })
+        }
+      })
     }, 800)
   }
 })

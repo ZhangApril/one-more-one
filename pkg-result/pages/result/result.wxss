@@ -62,6 +62,31 @@
   }
 }
 
+/* 身份行：授权用户显示微信头像+昵称，游客显示默认小红帽头像+「游客」 */
+.pc-user {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  border: 2rpx solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.15);
+  box-sizing: border-box;
+}
+
+.user-name {
+  margin-left: 16rpx;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 320rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .pc-top {
   display: flex;
   align-items: center;

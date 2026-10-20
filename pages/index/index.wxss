@@ -5,13 +5,18 @@
   padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
 }
 
-/* ========== 扁平几何森林插画 ========== */
+/* ========== 首页横幅插画 ========== */
 .hero {
   position: relative;
   width: 100%;
-  height: 640rpx;
-  background: linear-gradient(180deg, #2C4A38 0%, #26412F 62%, #1E3A2A 100%);
+  background: #1E3A2A;
   overflow: hidden;
+}
+
+.hero-img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .hero-tagline {
@@ -21,155 +26,8 @@
   font-family: "Kaiti SC", "STKaiti", "KaiTi", serif;
   font-size: 34rpx;
   letter-spacing: 6rpx;
-  color: #E8D9B0;
-}
-
-/* 月亮（黄色圆 + 光晕） */
-.moon {
-  position: absolute;
-  right: 72rpx;
-  top: 72rpx;
-  width: 96rpx;
-  height: 96rpx;
-  border-radius: 50%;
-  background: #F0C75E;
-  box-shadow: 0 0 0 28rpx rgba(240, 199, 94, 0.12), 0 0 0 56rpx rgba(240, 199, 94, 0.06);
-}
-
-/* 松树剪影（CSS 三角） */
-.tree {
-  position: absolute;
-  bottom: 120rpx;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-color: transparent;
-}
-
-.tree-1 {
-  left: 40rpx;
-  border-width: 0 90rpx 200rpx 90rpx;
-  border-bottom-color: #1B3226;
-}
-
-.tree-2 {
-  left: 250rpx;
-  border-width: 0 70rpx 160rpx 70rpx;
-  border-bottom-color: #20402E;
-}
-
-.tree-3 {
-  right: 60rpx;
-  border-width: 0 85rpx 190rpx 85rpx;
-  border-bottom-color: #1B3226;
-}
-
-.tree-4 {
-  right: 280rpx;
-  border-width: 0 60rpx 140rpx 60rpx;
-  border-bottom-color: #20402E;
-}
-
-/* 地面 */
-.ground {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 120rpx;
-  background: #1B3226;
-}
-
-/* 大灰狼（深灰团子 + 耳朵 + 黄眼睛） */
-.wolf {
-  position: absolute;
-  left: 96rpx;
-  bottom: 96rpx;
-  width: 110rpx;
-  height: 96rpx;
-  background: #3A3F3A;
-  border-radius: 48rpx 48rpx 24rpx 24rpx;
-  z-index: 2;
-}
-
-.wolf-ear {
-  position: absolute;
-  top: -22rpx;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-color: transparent;
-}
-
-.wolf-ear.left {
-  left: 14rpx;
-  border-width: 0 16rpx 26rpx 16rpx;
-  border-bottom-color: #3A3F3A;
-}
-
-.wolf-ear.right {
-  right: 14rpx;
-  border-width: 0 16rpx 26rpx 16rpx;
-  border-bottom-color: #3A3F3A;
-}
-
-.wolf-eye {
-  position: absolute;
-  top: 34rpx;
-  width: 10rpx;
-  height: 10rpx;
-  border-radius: 50%;
-  background: #F0C75E;
-}
-
-.wolf-eye.left { left: 28rpx; }
-.wolf-eye.right { right: 28rpx; }
-
-/* 小红帽（红斗篷 + 奶油色笑脸） */
-.hood {
-  position: absolute;
-  left: 50%;
-  bottom: 108rpx;
-  margin-left: -80rpx;
-  width: 160rpx;
-  height: 220rpx;
-  background: #D6453C;
-  border-radius: 80rpx 80rpx 12rpx 12rpx;
-  z-index: 2;
-}
-
-.hood-face {
-  position: absolute;
-  left: 50%;
-  top: 44rpx;
-  margin-left: -52rpx;
-  width: 104rpx;
-  height: 104rpx;
-  border-radius: 50%;
-  background: #F7E6CE;
-}
-
-.hood-eye {
-  position: absolute;
-  top: 40rpx;
-  width: 10rpx;
-  height: 10rpx;
-  border-radius: 50%;
-  background: #2B2B2B;
-}
-
-.hood-eye.left { left: 28rpx; }
-.hood-eye.right { right: 28rpx; }
-
-.hood-smile {
-  position: absolute;
-  left: 50%;
-  top: 56rpx;
-  margin-left: -16rpx;
-  width: 32rpx;
-  height: 18rpx;
-  border-bottom: 6rpx solid #2B2B2B;
-  border-radius: 0 0 32rpx 32rpx;
+  color: #F0E6D0;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.35);
 }
 
 /* ========== 奶油白文案区 ========== */
@@ -214,10 +72,35 @@
   align-items: center;
 }
 
-.avatar-btn {
-  width: 120rpx;
-  height: 120rpx;
+/* 透明热区：只覆盖头像圆，点任意位置都可拉起微信头像选择 */
+.avatar-pick {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  margin: 0;
   padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  font-size: 0;
+  line-height: 1;
+}
+
+.avatar-pick::after {
+  border: none;
+}
+
+.avatar-pick-hover {
+  background: rgba(30, 58, 42, 0.08);
+}
+
+/* 正圆头像 */
+.avatar-wrap {
+  position: relative;
+  width: 128rpx;
+  height: 128rpx;
   border-radius: 50%;
   overflow: hidden;
   background: #F1E6D2;
@@ -225,13 +108,19 @@
   box-shadow: 0 6rpx 16rpx rgba(30, 58, 42, 0.12);
 }
 
-.avatar-btn::after {
-  border: none;
+.avatar {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 50%;
 }
 
-.avatar {
-  width: 100%;
-  height: 100%;
+/* 未上传头像时的默认相机图 */
+.avatar-camera {
+  width: 128rpx;
+  height: 128rpx;
+  padding: 32rpx;
+  box-sizing: border-box;
+  opacity: 0.75;
 }
 
 .nickname-input {
@@ -251,14 +140,25 @@
   color: #B9AC93;
 }
 
-.skip {
+/* 游客入口：用 button 承载，保证点击一定可响应 */
+.skip-btn {
+  position: relative;
+  z-index: 3;
   margin-top: 20rpx;
+  padding: 8rpx 16rpx;
+  background: transparent;
   font-size: 26rpx;
+  font-weight: 400;
+  line-height: 1.4;
   color: var(--ono-primary);
 }
 
-.skip:active {
-  opacity: 0.7;
+.skip-btn::after {
+  border: none;
+}
+
+.skip-hover {
+  opacity: 0.6;
 }
 
 .start-btn {

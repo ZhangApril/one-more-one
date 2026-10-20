@@ -1,6 +1,9 @@
 /**
- * 引用自检：校验页面文件是否齐全、代码里引用的本地资源是否存在
+ * 引用自检：校验页面文件是否齐全、代码里引用的本地资源与 require 相对路径是否存在
  * 用法：node tools/check-refs.js
+ *
+ * 说明：曾出现「页面移入分包后 require 相对路径未同步修改，导致 JS 加载失败、页面空白」的问题，
+ * 因此这里增加 require 路径校验（把分包页面挪位置后能立刻发现）。
  */
 
 const fs = require('fs')
@@ -48,6 +51,23 @@ Array.from(refs)
     if (!fs.existsSync(path.join(ROOT, r))) missing.push('缺资源: ' + r)
   })
 
+// 校验 JS 里的相对 require 路径（含 .js 后缀省略的情况）
+const jsFiles = walk(ROOT).filter(f => /\.js$/.test(f))
+let requireCount = 0
+jsFiles.forEach(f => {
+  const content = fs.readFileSync(f, 'utf8')
+  const re = /require\(\s*['"](\.[^'"]+)['"]\s*\)/g
+  let m
+  while ((m = re.exec(content))) {
+    requireCount++
+    const base = path.resolve(path.dirname(f), m[1])
+    const candidates = [base, base + '.js', path.join(base, 'index.js')]
+    if (!candidates.some(c => fs.existsSync(c) && fs.statSync(c).isFile())) {
+      missing.push('require 路径不存在: ' + path.relative(ROOT, f) + ' → ' + m[1])
+    }
+  }
+})
+
 console.log('主包页面: ' + app.pages.length + ' · 分包: ' + (app.subPackages || []).length)
-console.log('引用资源: ' + refs.size + ' 个')
+console.log('引用资源: ' + refs.size + ' 个 · require 路径: ' + requireCount + ' 处')
 console.log(missing.length ? missing.join('\n') : '✅ 页面与资源引用校验全部通过')

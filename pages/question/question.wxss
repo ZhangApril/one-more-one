@@ -93,10 +93,16 @@
 }
 
 .scale-col {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 118rpx;
+  padding: 16rpx 0;
+}
+
+/* 点击反馈（即使逻辑层异常也能看到按压态，便于定位问题） */
+.scale-col-hover {
+  opacity: 0.6;
 }
 
 .circle {
@@ -108,6 +114,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 }
 

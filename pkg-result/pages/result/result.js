@@ -1,9 +1,13 @@
-const CONFIG = require('../../config/index.js')
-const { getPersonality, WOLF } = require('../../data/personalities.js')
+// 注意：本页位于分包 pkg-result/pages/result/，回根目录需三级（../../../）
+const CONFIG = require('../../../config/index.js')
+const { getPersonality, WOLF } = require('../../../data/personalities.js')
+const { getIdentity } = require('../../../utils/identity.js')
 
 Page({
   data: {
     lead: CONFIG.RESULT_LEAD,
+    avatarUrl: '',
+    nickName: '',
     disclaimer: CONFIG.RESULT_DISCLAIMER,
     shareText: CONFIG.BTN_SHARE,
     retestText: CONFIG.BTN_RETEST,
@@ -26,6 +30,9 @@ Page({
       return
     }
     const type = options.type || result.type
+    // 身份：已授权显示微信头像 + 昵称，游客显示默认小红帽头像 + 「游客」
+    const { avatarUrl, nickName } = getIdentity()
+    this.setData({ avatarUrl, nickName })
     this.render(type, result)
 
     // 命中隐藏结局：先展示正常人格，1.2s 后翻转为 WOLF

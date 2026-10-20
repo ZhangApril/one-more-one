@@ -2,7 +2,36 @@
   "compileType": "miniprogram",
   "libVersion": "trial",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "generated-images"
+      },
+      {
+        "type": "folder",
+        "value": "design"
+      },
+      {
+        "type": "folder",
+        "value": "UIref"
+      },
+      {
+        "type": "folder",
+        "value": "tools"
+      },
+      {
+        "type": "folder",
+        "value": ".codebuddy"
+      },
+      {
+        "type": "file",
+        "value": "REQUIREMENTS.md"
+      },
+      {
+        "type": "file",
+        "value": "design.md"
+      }
+    ],
     "include": []
   },
   "setting": {
@@ -29,7 +58,36 @@
     "minifyWXML": true,
     "useCompilerPlugins": false
   },
-  "condition": {},
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "首页",
+          "pathName": "pages/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "答题页",
+          "pathName": "pages/question/question",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "结果页",
+          "pathName": "pkg-result/pages/result/result",
+          "query": "type=INFP",
+          "scene": null
+        },
+        {
+          "name": "分享页",
+          "pathName": "pkg-result/pages/share/share",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  },
   "editorSetting": {
     "tabIndent": "auto",
     "tabSize": 2

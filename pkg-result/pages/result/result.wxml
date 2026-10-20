@@ -4,6 +4,10 @@
     <view
       class="persona-card {{displayType === 'WOLF' ? 'camp-wolfking' : 'camp-' + p.camp}} {{showWolf ? 'flip' : ''}}"
     >
+      <view class="pc-user">
+        <image class="user-avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+        <text class="user-name">{{nickName}}</text>
+      </view>
       <view class="pc-top">
         <text class="pc-lead">{{lead}}</text>
         <view class="badge">{{displayType}}</view>

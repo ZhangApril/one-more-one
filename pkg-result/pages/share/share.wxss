@@ -32,6 +32,32 @@
   box-shadow: var(--ono-shadow);
 }
 
+.empty {
+  padding: 120rpx 64rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.empty-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--ono-text);
+}
+
+.empty-desc {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  line-height: 1.7;
+  color: var(--ono-text-sub);
+}
+
+.empty-btn {
+  margin-top: 48rpx;
+  width: 100%;
+}
+
 .poster-loading {
   width: 100%;
   height: 800rpx;
@@ -50,23 +76,31 @@
   color: var(--ono-text-sub);
 }
 
-/* 三个圆形操作 */
+/* 三个圆形操作：三项等宽（flex: 1），内容各自居中 → 图标等距且整行居中 */
 .actions {
   display: flex;
-  justify-content: space-around;
+  align-items: flex-start;
+  justify-content: center;
   width: 100%;
   margin-top: 40rpx;
 }
 
+/* 注意：前两项是 button、第三项是 view，需统一盒模型，否则宽高与默认边距不一致 */
 .act {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   background: transparent;
-  padding: 0;
   font-size: 24rpx;
-  color: var(--ono-text);
+  font-weight: 400;
   line-height: 1.4;
+  color: var(--ono-text);
+  text-align: center;
 }
 
 .act::after {
@@ -91,10 +125,10 @@
   box-sizing: border-box;
 }
 
+/* 图标四周已留 11% 统一边距（内容占 78%），故按 92rpx 显示，实际图形约 72rpx，正好居中于 108rpx 圆内 */
 .act-img {
-  width: 64rpx;
-  height: 64rpx;
-  border-radius: 50%;
+  width: 92rpx;
+  height: 92rpx;
 }
 
 .back-btn {

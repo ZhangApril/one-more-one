@@ -1,5 +1,11 @@
 <view class="page">
-  <view class="wrap">
+  <view wx:if="{{noResult}}" class="empty">
+    <view class="empty-title">这份分享已经失效</view>
+    <view class="empty-desc">链接里没有测试结果，回到首页做一次测试，就能生成你自己的森林人格卡片。</view>
+    <button class="btn btn-primary empty-btn" bindtap="onBackHome">回到首页</button>
+  </view>
+
+  <view wx:else class="wrap">
     <view class="poster-box">
       <canvas type="2d" id="posterCanvas" class="poster-canvas"></canvas>
       <image
@@ -17,19 +23,23 @@
     <view class="actions">
       <button class="act" open-type="share">
         <view class="act-icon">
-          <image class="act-img" src="/assets/ui/icon-wechat.jpg" mode="aspectFill"></image>
+          <image class="act-img" src="/assets/ui/icon-wechat.png" mode="aspectFit"></image>
         </view>
         <text>微信好友</text>
       </button>
-      <button class="act" open-type="shareTimeline">
+      <button
+        class="act"
+        open-type="shareTimeline"
+        bindtap="onShareTimelineTap"
+      >
         <view class="act-icon">
-          <image class="act-img" src="/assets/ui/icon-timeline.jpg" mode="aspectFill"></image>
+          <image class="act-img" src="/assets/ui/icon-timeline.png" mode="aspectFit"></image>
         </view>
         <text>朋友圈</text>
       </button>
       <view class="act" bindtap="onSave">
         <view class="act-icon">
-          <image class="act-img" src="/assets/ui/icon-save.jpg" mode="aspectFill"></image>
+          <image class="act-img" src="/assets/ui/icon-save.png" mode="aspectFit"></image>
         </view>
         <text>保存图片</text>
       </view>
