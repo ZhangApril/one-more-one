@@ -39,7 +39,10 @@
       <button class="skip-btn" hover-class="skip-hover" bindtap="onSkip">{{skipText}}</button>
     </view>
 
-    <button class="btn btn-primary start-btn" bindtap="onStart">{{startText}}</button>
+    <button class="btn btn-primary start-btn" hover-class="start-hover" bindtap="onStart">
+      <view class="start-shine"></view>
+      <text class="start-label">{{startText}}</text>
+    </button>
     <view class="trust">{{trust}}</view>
   </view>
 </view>

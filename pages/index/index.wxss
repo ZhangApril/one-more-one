@@ -161,8 +161,70 @@
   opacity: 0.6;
 }
 
+/* 立即测试：呼吸缩放 + 流光扫过，吸引点击 */
 .start-btn {
+  position: relative;
+  overflow: hidden;
   margin-top: 48rpx;
+  animation: start-breathe 2.6s ease-in-out infinite;
+}
+
+.start-btn::after {
+  border: none;
+}
+
+.start-label {
+  position: relative;
+  z-index: 2;
+}
+
+/* 斜向流光：从左上扫到右下，循环一次后停 1.2s */
+.start-shine {
+  position: absolute;
+  top: -60%;
+  left: -60%;
+  z-index: 1;
+  width: 45%;
+  height: 220%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(20deg);
+  animation: start-shine 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes start-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 10rpx 24rpx rgba(192, 69, 61, 0.28);
+  }
+  50% {
+    transform: scale(1.028);
+    box-shadow: 0 18rpx 36rpx rgba(192, 69, 61, 0.42);
+  }
+}
+
+@keyframes start-shine {
+  0% {
+    transform: translateX(0) rotate(20deg);
+  }
+  55%,
+  100% {
+    /* 位移按自身宽度计算，确保完整扫过按钮（自身宽约 300rpx） */
+    transform: translateX(340%) rotate(20deg);
+  }
+}
+
+/* 按下时停掉动效（否则 animation 的 transform 会覆盖按压反馈），保证点击手感 */
+.start-hover {
+  animation: none;
+  transform: scale(0.97);
+  opacity: 0.9;
 }
 
 .trust {
